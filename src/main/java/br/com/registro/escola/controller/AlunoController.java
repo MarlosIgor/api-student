@@ -44,4 +44,5 @@ public class AlunoController {
     public void deleteById(@Valid @PathVariable("id") Long id) {
         alunoService.deleteByIdAluno(id);
     }
+
 }

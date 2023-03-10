@@ -31,6 +31,8 @@ public class Aluno {
 
     private String bairro;
 
+    private String email;
+
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataDeNascimento;
 

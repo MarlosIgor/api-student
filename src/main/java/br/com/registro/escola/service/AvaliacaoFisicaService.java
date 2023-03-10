@@ -21,15 +21,16 @@ public class AvaliacaoFisicaService {
     @Autowired
     private AlunoRepository alunoRepository;
 
-    public AvaliacaoFisica createAvaliacaoFisica(AvaliacaoFisicaForm avaliacaoFisicaForm, Long id) {
+    public AvaliacaoFisica createAvaliacaoFisica(AvaliacaoFisicaForm avaliacaoFisicaForm) {
+        Long alunoId = avaliacaoFisicaForm.getAlunoId();
+
+        Aluno aluno = alunoRepository.findById(alunoId)
+                .orElseThrow(() -> new NotFoundException("Id não encontrado : " + alunoId));
+
         AvaliacaoFisica avaliacaoFisica = new AvaliacaoFisica();
-
-        Aluno aluno = alunoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Id não encontrado : " + id));
-
+        avaliacaoFisica.setAluno(aluno);
         avaliacaoFisica.setPeso(avaliacaoFisicaForm.getPeso());
         avaliacaoFisica.setAltura(avaliacaoFisicaForm.getAltura());
-        avaliacaoFisica.setAluno(alunoRepository.getReferenceById(aluno.getId()));
 
         return avaliacaoFisicaRepository.save(avaliacaoFisica);
     }

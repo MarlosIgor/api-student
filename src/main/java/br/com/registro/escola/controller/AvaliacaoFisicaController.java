@@ -21,8 +21,8 @@ public class AvaliacaoFisicaController {
 
 
     @PostMapping("/criar")
-    public ResponseEntity<AvaliacaoFisica> save(@Valid @RequestBody AvaliacaoFisicaForm avaliacaoFisicaForm, Long id) {
-        return new ResponseEntity<>(avaliacaoFisicaService.createAvaliacaoFisica(avaliacaoFisicaForm, avaliacaoFisicaForm.getAlunoId()), HttpStatus.CREATED);
+    public ResponseEntity<AvaliacaoFisica> save(@Valid @RequestBody AvaliacaoFisicaForm avaliacaoFisicaForm) {
+        return new ResponseEntity<>(avaliacaoFisicaService.createAvaliacaoFisica(avaliacaoFisicaForm), HttpStatus.CREATED);
     }
 
     @GetMapping("/listar-todos")

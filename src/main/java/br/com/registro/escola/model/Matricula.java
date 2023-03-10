@@ -23,6 +23,8 @@ public class Matricula {
     @JoinColumn(name = "aluno_id")
     private Aluno aluno;
 
+    private String email;
+
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime dataDaMatricula = LocalDateTime.now();
 

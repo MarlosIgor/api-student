@@ -7,6 +7,8 @@ import br.com.registro.escola.model.form.MatriculaForm;
 import br.com.registro.escola.repository.AlunoRepository;
 import br.com.registro.escola.repository.MatriculaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,19 +22,45 @@ public class MatriculaService {
     @Autowired
     private AlunoRepository alunoRepository;
 
-    public Matricula createAvaliacaoFisica(MatriculaForm matriculaForm, Long id) {
+    @Autowired
+    private JavaMailSender mailSender;
+
+    public Matricula criarMatricula(MatriculaForm matriculaForm) {
         Matricula matricula = new Matricula();
+        Long alunoId = matriculaForm.getAlunoId();
+        String alunoEmail = matricula.getEmail();
 
-        Aluno aluno = alunoRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Id não encontrado : " + id));
+        Aluno aluno = alunoRepository.findById(alunoId)
+                .orElseThrow(() -> new NotFoundException("Aluno não encontrado com o ID: " + alunoId));
 
-        if (matriculaRepository.existsByAlunoId(matriculaForm.getAlunoId())) {
-            throw new NotFoundException("Esse aluno com ID: " + id + " já está matriculado");
+        if (matriculaRepository.existsByAlunoId(alunoId)) {
+            throw new NotFoundException("O aluno com ID " + alunoId + " já está matriculado.");
         }
 
-        matricula.setAluno(alunoRepository.getReferenceById(aluno.getId()));
+        matricula.setAluno(aluno);
+        matricula.setEmail(aluno.getEmail());
+
+        enviarEmailMatriculaCriada(matricula);
 
         return matriculaRepository.save(matricula);
+    }
+
+    private void enviarEmailMatriculaCriada(Matricula matricula) {
+        String email = matricula.getEmail();
+        Long id = matricula.getId();
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject(matricula.getAluno().getNome() + " seu cadastro foi recebido !");
+        message.setText("Ola " + matricula.getAluno().getNome()
+                + "! Seja muito bem-vindo(a) em nosso site. "
+                + "Os seus dados de acesso estao logo abaixo. \n\n"
+                + "=========================== \n"
+                + "Nome: " + matricula.getAluno().getNome() + "\n"
+                + "E-mail: " + matricula.getAluno().getEmail() + "\n"
+                + "Cpf: " + matricula.getAluno().getCpf() + "\n"
+                + "=========================== \n\n");
+        mailSender.send(message);
     }
 
     public List<Matricula> getAllAvaliacaoFisica() {

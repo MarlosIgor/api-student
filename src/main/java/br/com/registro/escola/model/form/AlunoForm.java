@@ -2,15 +2,18 @@ package br.com.registro.escola.model.form;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.br.CPF;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class AlunoForm {
@@ -29,5 +32,9 @@ public class AlunoForm {
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataDeNascimento;
+
+    @Email(message = "'${validatedValue}' é inválido!")
+    @NotEmpty(message = "Preencha o campo corretamente.")
+    private String email;
 
 }

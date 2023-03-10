@@ -17,16 +17,16 @@ public class AlunoService {
     private AlunoRepository alunoRepository;
 
     public Aluno createAluno(AlunoForm alunoForm) {
-        Aluno aluno = new Aluno();
-
         if (alunoRepository.existsByCpf(alunoForm.getCpf())) {
             throw new NotFoundException("Já existe um aluno com esse CPF: " + alunoForm.getCpf());
         }
 
+        Aluno aluno = new Aluno();
         aluno.setNome(alunoForm.getNome());
         aluno.setCpf(alunoForm.getCpf());
         aluno.setBairro(alunoForm.getBairro());
         aluno.setDataDeNascimento(alunoForm.getDataDeNascimento());
+        aluno.setEmail(alunoForm.getEmail());
 
         return alunoRepository.save(aluno);
     }

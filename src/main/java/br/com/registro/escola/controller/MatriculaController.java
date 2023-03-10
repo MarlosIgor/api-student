@@ -19,8 +19,8 @@ public class MatriculaController {
     private MatriculaService matriculaService;
 
     @PostMapping("/criar")
-    public ResponseEntity<Matricula> save(@Valid @RequestBody MatriculaForm matriculaForm, Long id) {
-        return new ResponseEntity<>(matriculaService.createAvaliacaoFisica(matriculaForm, matriculaForm.getAlunoId()), HttpStatus.CREATED);
+    public ResponseEntity<Matricula> save(@Valid @RequestBody MatriculaForm matriculaForm) {
+        return new ResponseEntity<>(matriculaService.criarMatricula(matriculaForm), HttpStatus.CREATED);
     }
 
     @GetMapping("/listar-todos")
